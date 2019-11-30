@@ -25,7 +25,7 @@ namespace GameOfLife
 
         public char Print()
         {
-            return _state ? 'X' : '-';
+            return _state ? 'X' : '.';
         }
 
         public bool IsAlive()
@@ -33,9 +33,9 @@ namespace GameOfLife
             return _state;
         }
 
-        public GridSquareStatus GridStatus()
+        public GridCellStatus GridStatus()
         {
-            return _state ? GridSquareStatus.Alive : GridSquareStatus.Dead;
+            return _state ? GridCellStatus.Alive : GridCellStatus.Dead;
         }
 
         public void SetToRandomState()

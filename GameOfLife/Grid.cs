@@ -9,11 +9,11 @@ namespace GameOfLife
         private Cell[,] _cells;
         private const char SelfToken = '0';
         private const char OutsideBoundsToken = 'B';
-        private delegate GridSquareStatusResult Rule(string neighbours, GridSquareStatus cellStatus);
+        private delegate GridCellStatusResult Rule(string neighbours, GridCellStatus cellStatus);
         private List<Rule> rules;
-        public Grid(int universeWidth, int universeHeight)
+        public Grid(int width, int height)
         {
-            var _cells = new Cell[universeWidth, universeHeight];
+            _cells = new Cell[width, height];
 
             rules = new List<Rule>
             {
@@ -31,12 +31,61 @@ namespace GameOfLife
 
         public void SeedGrid()
         {
-            Console.WriteLine("Initial grid will be setup here");
+            for (var i = 0; i < _cells.GetLength(0); i++)
+            {
+                for (var j = 0; j < _cells.GetLength(1); j++)
+                {
+                    _cells[i, j] = new Cell();
+                    _cells[i, j].SetToRandomState();
+                }
+            }
         }
 
         public void Tick()
         {
-            Console.WriteLine("Rule for next tick will be applied to generate the next cells");
+            var nextGeneration = new Cell[_cells.GetLength(0), _cells.GetLength(1)];
+            for (var i = 0; i < nextGeneration.GetLength(0); i++)
+            {
+                for (var j = 0; j < nextGeneration.GetLength(1); j++)
+                {
+                    nextGeneration[i, j] = new Cell(false);
+                }
+            }
+
+            for (var i = 0; i < _cells.GetLength(0); i++)
+            {
+                for (var j = 0; j < _cells.GetLength(1); j++)
+                {
+                    var nextGenerationCellResult = GridCellStatusResult.NoChange;
+
+                    var neighbours = GetNeighbours(i, j);
+
+                    foreach (var rule in rules)
+                    {
+                        var result = rule(neighbours, _cells[i, j].GridStatus());
+
+                        if (result == GridCellStatusResult.Live || result == GridCellStatusResult.Die)
+                        {
+                            nextGenerationCellResult = result;
+                        }
+                    }
+
+                    //Appy Rule to next world
+                    switch (nextGenerationCellResult)
+                    {
+                        case GridCellStatusResult.Live:
+                            nextGeneration[i, j].SetToAlive();
+                            break;
+                        case GridCellStatusResult.Die:
+                            nextGeneration[i, j].SetToDie();
+                            break;
+                        case GridCellStatusResult.NoChange:
+                            nextGeneration[i, j] = _cells[i, j];
+                            break;
+                    }
+                }
+            }
+            _cells = nextGeneration;
         }
 
         public string GetNeighbours(int x, int y)

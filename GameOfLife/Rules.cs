@@ -6,51 +6,51 @@ namespace GameOfLife
 {
     public static class Rules
     {
-        public static GridSquareStatusResult Underpopulated(string neighbours, GridSquareStatus cellStatus)
+        public static GridCellStatusResult Underpopulated(string neighbours, GridCellStatus cellStatus)
         {
             var count = neighbours.Split('X').Length - 1;
             if (count < 2)
             {
-                return GridSquareStatusResult.Die;
+                return GridCellStatusResult.Die;
             };
 
-            return GridSquareStatusResult.NoChange;
+            return GridCellStatusResult.NoChange;
         }
 
         //Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
-        public static GridSquareStatusResult DeadAndCorrectAmountOfNeighboursToLive(string neighbours, GridSquareStatus cellStatus)
+        public static GridCellStatusResult DeadAndCorrectAmountOfNeighboursToLive(string neighbours, GridCellStatus cellStatus)
         {
             var count = neighbours.Split('X').Length - 1;
-            if (count == 3 && cellStatus == GridSquareStatus.Dead)
+            if (count == 3 && cellStatus == GridCellStatus.Dead)
             {
-                return GridSquareStatusResult.Live;
+                return GridCellStatusResult.Live;
             }
 
-            return GridSquareStatusResult.NoChange;
+            return GridCellStatusResult.NoChange;
         }
 
         //Any live cell with two or three live neighbours lives on to the next generation.
-        public static GridSquareStatusResult AliveAndCorrectAmountOfNeighboursToLive(string neighbours, GridSquareStatus cellStatus)
+        public static GridCellStatusResult AliveAndCorrectAmountOfNeighboursToLive(string neighbours, GridCellStatus cellStatus)
         {
             var count = neighbours.Split('X').Length - 1;
-            if ((count == 3 || count == 2) && cellStatus == GridSquareStatus.Alive)
+            if ((count == 3 || count == 2) && cellStatus == GridCellStatus.Alive)
             {
-                return GridSquareStatusResult.Live;
+                return GridCellStatusResult.Live;
             }
 
-            return GridSquareStatusResult.NoChange;
+            return GridCellStatusResult.NoChange;
         }
 
         //Any live cell with more than three live neighbours dies, as if by overpopulation.
-        public static GridSquareStatusResult OverPopulated(string neighbours, GridSquareStatus cellStatus)
+        public static GridCellStatusResult OverPopulated(string neighbours, GridCellStatus cellStatus)
         {
             var count = neighbours.Split('X').Length - 1;
             if (count > 3)
             {
-                return GridSquareStatusResult.Die;
+                return GridCellStatusResult.Die;
             }
 
-            return GridSquareStatusResult.NoChange;
+            return GridCellStatusResult.NoChange;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace GameOfLife
 {
@@ -6,7 +7,7 @@ namespace GameOfLife
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Conways Game of life World!");
+            Console.WriteLine("Conways Game of life!");
 
             var grid = new Grid(20, 20);
             grid.SeedGrid();
@@ -14,11 +15,30 @@ namespace GameOfLife
             for (var i = 0; i < 100; i++)
             {
                 Console.WriteLine();
-                Console.WriteLine($"------Tick {i}------");
+                Console.WriteLine($"------Generation {i}------");
+                PrintcellInConsole(grid.GetCells());
                 grid.Tick();
+                Thread.Sleep(500);
+            }
+        }
 
-                //Thread.Sleep(500);
-                Console.ReadLine();
+        public static string PrintHorizontalLine(Cell[,] cell, int line)
+        {
+            var result = "";
+
+            for (int i = 0; i < cell.GetLength(0); i++)
+            {
+                result = result + cell[line, i].Print();
+            }
+
+            return result;
+        }
+
+        public static void PrintcellInConsole(Cell[,] cell)
+        {
+            for (int i = 0; i < cell.GetLength(0); i++)
+            {
+                Console.WriteLine(PrintHorizontalLine(cell,i));
             }
         }
     }
