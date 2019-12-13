@@ -9,7 +9,7 @@ namespace GameOfLife
         private static Cell[,] _cells;
         private const char SelfToken = '0';
         private const char OutsideBoundsToken = 'B';
-        private delegate GridCellStatusResult Rule(string neighbours, GridCellStatus cellStatus);
+        private delegate CellStatusResult Rule(string neighbours, CellStatus cellStatus);
         private static List<Rule> rules;
         static void Main(string[] args)
         {
@@ -22,7 +22,7 @@ namespace GameOfLife
                 new Rule(Rules.AliveAndCorrectAmountOfNeighboursToLive),
                 new Rule(Rules.DeadAndCorrectAmountOfNeighboursToLive)
             };
-            SeedGrid();
+            Seed();
 
             for (var i = 0; i < 100; i++)
             {
@@ -60,7 +60,7 @@ namespace GameOfLife
             return _cells;
         }
 
-        public static void SeedGrid()
+        public static void Seed()
         {
             for (var i = 0; i < _cells.GetLength(0); i++)
             {
@@ -87,15 +87,15 @@ namespace GameOfLife
             {
                 for (var j = 0; j < _cells.GetLength(1); j++)
                 {
-                    var nextGenerationCellResult = GridCellStatusResult.NoChange;
+                    var nextGenerationCellResult = CellStatusResult.NoChange;
 
                     var neighbours = GetNeighbours(i, j);
 
                     foreach (var rule in rules)
                     {
-                        var result = rule(neighbours, _cells[i, j].GridStatus());
+                        var result = rule(neighbours, _cells[i, j].GridCellStatus());
 
-                        if (result == GridCellStatusResult.Live || result == GridCellStatusResult.Die)
+                        if (result == CellStatusResult.Live || result == CellStatusResult.Die)
                         {
                             nextGenerationCellResult = result;
                         }
@@ -104,13 +104,13 @@ namespace GameOfLife
                     //Appy Rule to next world
                     switch (nextGenerationCellResult)
                     {
-                        case GridCellStatusResult.Live:
+                        case CellStatusResult.Live:
                             nextGeneration[i, j].SetToAlive();
                             break;
-                        case GridCellStatusResult.Die:
+                        case CellStatusResult.Die:
                             nextGeneration[i, j].SetToDie();
                             break;
-                        case GridCellStatusResult.NoChange:
+                        case CellStatusResult.NoChange:
                             nextGeneration[i, j] = _cells[i, j];
                             break;
                     }

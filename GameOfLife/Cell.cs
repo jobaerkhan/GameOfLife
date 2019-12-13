@@ -33,9 +33,9 @@ namespace GameOfLife
             return _state;
         }
 
-        public GridCellStatus GridStatus()
+        public CellStatus GridCellStatus()
         {
-            return _state ? GridCellStatus.Alive : GridCellStatus.Dead;
+            return _state ? CellStatus.Alive : CellStatus.Dead;
         }
 
         public void SetToRandomState()

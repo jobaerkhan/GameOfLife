@@ -1,6 +1,6 @@
 ﻿namespace GameOfLife
 {
-    public enum GridCellStatusResult
+    public enum CellStatusResult
     {
         Live,
         Die,
