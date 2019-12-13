@@ -93,7 +93,7 @@ namespace GameOfLife
 
                     foreach (var rule in rules)
                     {
-                        var result = rule(neighbours, _cells[i, j].GridCellStatus());
+                        var result = rule(neighbours, _cells[i, j].CellStatus());
 
                         if (result == CellStatusResult.Live || result == CellStatusResult.Die)
                         {
